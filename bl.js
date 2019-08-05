@@ -73,7 +73,7 @@ module.exports = class BLControls extends EventEmitter {
 
 
                 case 'people':
-                    if (report.count >= 0) {
+                    if (report.count >= 1) {
                         statusArray[2] = 1;
                         return resolve (statusArray);
 
