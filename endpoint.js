@@ -1,5 +1,7 @@
 "use strict";
-
+/*
+Endpoint file controls access to video endpoint. Is compatible with CE9.7 and above.
+ */
 const WebSocket = require('ws');
 const EventEmitter = require('events');
 const XAPI = require('jsxapi/lib/xapi').default;
@@ -27,6 +29,7 @@ module.exports = class TPXapi extends EventEmitter{
         this.init();
 
     }
+    //Intialize connection and perform intial endpoint checks for state.
     init() {
         try {
             (async () => {

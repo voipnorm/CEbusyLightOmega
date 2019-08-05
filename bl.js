@@ -1,6 +1,5 @@
 "use strict";
-//pulse red, red, blue, green
-//array index is priority, default is green
+
 const util = require("util");
 const EventEmitter = require('events');
 const busylight = require('busylight');
@@ -12,7 +11,7 @@ module.exports = class BLControls extends EventEmitter {
         super();
 
         this.currentState = [];
-        this.prevState = [0,0,0,1];
+        this.prevState = [0,0,0,1];//Array provides state and priority. Index 0-4 is highest to lowest priority.
         this.device;
         this.bl;
         this.launch();
@@ -23,7 +22,7 @@ module.exports = class BLControls extends EventEmitter {
         this.usbState();
         this.bldefaults();
     }
-
+//sets color based on the index of first array element set to 1.
     setColor(colorArray) {
         console.log(colorArray);
         let indexColor = colorArray.indexOf(1);
@@ -47,7 +46,7 @@ module.exports = class BLControls extends EventEmitter {
         return
 
     }
-
+//updates the current array status
     updateState(report,statusArray) {
         //console.log(statusArray)
         return new Promise((resolve, reject) => {
