@@ -36,6 +36,7 @@ module.exports = class TPXapi extends EventEmitter{
                 await this.connect();
                 await this.onReady();
                 await this.checkCallStatus();
+                await this.checkPeopleCount();
                 await this.checkPeoplePresence();
                 await this.checkDnD();
             })();
@@ -72,6 +73,7 @@ module.exports = class TPXapi extends EventEmitter{
             this.connectedStatus = 'true';
             this.monitorCallStatus();
             this.monitorPeopleStatus();
+            this.monitorPeoplePresence();
             this.monitorDnDStatus();
             return this;
         });
@@ -136,7 +138,7 @@ module.exports = class TPXapi extends EventEmitter{
 
 
     }
-    checkPeoplePresence(){
+    checkPeopleCount(){
 
         return new Promise((resolve, reject) => {
             this.xapi.status.get('RoomAnalytics PeopleCount')
@@ -153,6 +155,25 @@ module.exports = class TPXapi extends EventEmitter{
         this.xapi.status.on('RoomAnalytics PeopleCount', (data) => {
             console.log(data);
            return this.emit('status', {state: 'people', count: data.Current});
+        })
+    }
+    checkPeoplePresence(){
+        return new Promise((resolve, reject) => {
+            this.xapi.status.get('RoomAnalytics PeoplePresence')
+                .then(data => {
+                    console.log(data)
+                    resolve(this.emit('status', {state: 'peoplePresence', presence: data}));
+                }).catch(e => {
+                console.error(e);
+                reject()
+            })
+        })
+    }
+
+    monitorPeoplePresence() {
+        this.xapi.status.on('RoomAnalytics PeoplePresence', (data) => {
+            console.log(data);
+            return this.emit('status', {state: 'peoplePresence', presence: data});
         })
     }
     checkDnD(){

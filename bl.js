@@ -19,8 +19,8 @@ module.exports = class BLControls extends EventEmitter {
 
     launch() {
         this.bl = busylight.get();
-        this.usbState();
         this.bldefaults();
+        this.usbState();
     }
 //sets color based on the index of first array element set to 1.
     setColor(colorArray) {
@@ -82,6 +82,15 @@ module.exports = class BLControls extends EventEmitter {
                         return resolve (statusArray);
 
                     }
+                case 'peoplePresence':
+                    if (report.presence === 'Yes') {
+                        console.log("people detected");
+                        return resolve (statusArray);
+                    } else {
+                        console.log("No people detected");
+                        return resolve (statusArray);
+
+                    }
                 default:
                     return reject()
 
@@ -106,14 +115,16 @@ module.exports = class BLControls extends EventEmitter {
     usbState(){
         this.bl.on('disconnected', (err) => {
             console.log("Busy light disconnected");
+            this.bl.close();
         });
 
         this.bl.on('connected', () => {
             console.log("Busylight found");
-            if (!this.bl)
+            if (!this.bl){
                 return console.log('no busylight found');
-
-
+            }else{
+                this.setColor(this.currentState);
+            }
         });
     }
     bldefaults(){
