@@ -12,6 +12,7 @@
     "busylight": "^0.4.0",
     "dotenv": "^8.0.0",
     "jsxapi": "^4.3.2",
+    "kasa_control": "^0.1.0",
     "ws": "^7.1.1"
   }
 }

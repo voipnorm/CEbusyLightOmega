@@ -75,6 +75,7 @@ module.exports = class TPXapi extends EventEmitter{
             this.monitorPeopleStatus();
             this.monitorPeoplePresence();
             this.monitorDnDStatus();
+            this.monitorWidget();
             return this;
         });
     };
@@ -192,6 +193,17 @@ module.exports = class TPXapi extends EventEmitter{
         this.xapi.status.on('Conference DoNotDisturb', (data) => {
             console.log(data);
             return this.emit('status', {state: 'dnd', status: data});
+        })
+    }
+    monitorWidget() {
+        this.xapi.event.on('UserInterface Extensions Widget Action', (event) => {
+            const msg = `id=${event.WidgetId} / type=${event.Type} / value=${event.Value}`;
+            console.log(msg);
+            if(event.WidgetId === 'office'){
+                return this.emit('status', {state: 'lights', status: event.Value});
+            }else{
+                return this.emit('status', {state: 'dimmer', status: event.Value});
+            }
         })
     }
 
