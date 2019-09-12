@@ -37,6 +37,14 @@ tp.on('status', (report) => {
 
 });
 
+
+async function lights(state) {
+    await kasa.login(email, password);
+    const devices = await kasa.power(kasaLightId,state);
+
+    console.log(devices);
+}
+
 process.on('SIGINT', function() {
     console.log('server : stoppping...');
     bl.shutdown();
